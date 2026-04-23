@@ -126,7 +126,7 @@ export default function App() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#2a2d3a" />
                 <XAxis type="number" stroke="#475569" tick={{ fontSize: 11 }} />
                 <YAxis dataKey="sector" type="category" stroke="#475569" tick={{ fontSize: 11 }} width={90} />
-                <Tooltip contentStyle={{ background: "#1a1d27", border: "1px solid #2a2d3a", borderRadius: 8, fontSize: 12 }} formatter={(v: number) => [`${v} deals`, "Count"]} />
+                <Tooltip contentStyle={{ background: "#1a1d27", border: "1px solid #2a2d3a", borderRadius: 8, fontSize: 12 }} formatter={(v) => [`${v} deals`, "Count"]} />
                 <Bar dataKey="count" radius={[0, 4, 4, 0]}>
                   {(stats?.by_sector ?? []).map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                 </Bar>
@@ -143,7 +143,7 @@ export default function App() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#2a2d3a" />
                 <XAxis dataKey="month" stroke="#475569" tick={{ fontSize: 11 }} />
                 <YAxis stroke="#475569" tick={{ fontSize: 11 }} />
-                <Tooltip contentStyle={{ background: "#1a1d27", border: "1px solid #2a2d3a", borderRadius: 8, fontSize: 12 }} formatter={(v: number) => [`$${v}M`, "Raised"]} />
+                <Tooltip contentStyle={{ background: "#1a1d27", border: "1px solid #2a2d3a", borderRadius: 8, fontSize: 12 }} formatter={(v) => [`$${v}M`, "Raised"]} />
                 <Line type="monotone" dataKey="total_usd_m" stroke="#6366f1" strokeWidth={2} dot={{ fill: "#6366f1", r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
@@ -160,7 +160,7 @@ export default function App() {
               <CartesianGrid strokeDasharray="3 3" stroke="#2a2d3a" />
               <XAxis dataKey="round_type" stroke="#475569" tick={{ fontSize: 11 }} />
               <YAxis stroke="#475569" tick={{ fontSize: 11 }} />
-              <Tooltip contentStyle={{ background: "#1a1d27", border: "1px solid #2a2d3a", borderRadius: 8, fontSize: 12 }} formatter={(v: number) => [`$${v}M`, "Raised"]} />
+              <Tooltip contentStyle={{ background: "#1a1d27", border: "1px solid #2a2d3a", borderRadius: 8, fontSize: 12 }} formatter={(v) => [`$${v}M`, "Raised"]} />
               <Bar dataKey="total_usd_m" radius={[4, 4, 0, 0]}>
                 {(stats?.by_round ?? []).map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Bar>
