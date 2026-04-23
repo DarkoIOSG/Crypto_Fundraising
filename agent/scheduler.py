@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from agent.db import Deal, init_db, save_deal, url_exists
+from agent.db import Deal, deal_exists, init_db, save_deal, url_exists
 from agent.extractor import extract
 from agent.feeds import FEEDS, is_fundraising_item
 
@@ -45,6 +45,11 @@ def ingest_feeds() -> int:
                 company = data.get("company", "Unknown")
                 amount = data.get("amount_usd")
                 round_type = data.get("round_type")
+                deal_date = data.get("deal_date")
+
+                if deal_exists(company, deal_date):
+                    logger.info("Skipped duplicate: %s on %s", company, deal_date)
+                    continue
 
                 deal = Deal(
                     company=company,
@@ -52,7 +57,7 @@ def ingest_feeds() -> int:
                     round_type=round_type,
                     sector=data.get("sector"),
                     lead_investors=data.get("lead_investors"),
-                    deal_date=data.get("deal_date"),
+                    deal_date=deal_date,
                     source_url=url,
                     raw_title=title,
                     source_name=source_name,

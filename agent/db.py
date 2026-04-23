@@ -37,6 +37,19 @@ def url_exists(url: str) -> bool:
         return session.exec(select(Deal).where(Deal.source_url == url)).first() is not None
 
 
+def deal_exists(company: str, deal_date: Optional[str]) -> bool:
+    """Check if a deal for the same company on the same date already exists (cross-source dedup)."""
+    if not deal_date:
+        return False
+    with Session(engine) as session:
+        return session.exec(
+            select(Deal).where(
+                Deal.company == company,
+                Deal.deal_date == deal_date,
+            )
+        ).first() is not None
+
+
 def save_deal(deal: Deal) -> None:
     with Session(engine) as session:
         session.add(deal)
