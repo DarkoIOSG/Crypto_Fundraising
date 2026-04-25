@@ -46,6 +46,10 @@ def extract(title: str, summary: str, pub_date: str = "") -> dict | None:
         data = json.loads(raw)
         if data.get("skip"):
             return None
+        # clean up string "null" values the LLM sometimes returns
+        for key in ("amount_usd", "round_type", "sector", "lead_investors", "deal_date"):
+            if data.get(key) in ("null", "None", "", "unknown", "Unknown"):
+                data[key] = None
         data["_raw"] = raw
         return data
     except (json.JSONDecodeError, Exception) as e:
