@@ -44,14 +44,14 @@ export default function App() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [s, d, f] = await Promise.all([
+      const [s, d, f] = await Promise.allSettled([
         fetchStats(),
         fetchDeals({ sector: sector || undefined, round_type: roundType || undefined, limit: 50 }),
         fetchFilters(),
       ]);
-      setStats(s);
-      setDeals(d.deals);
-      setFilters(f);
+      if (s.status === "fulfilled") setStats(s.value);
+      if (d.status === "fulfilled") setDeals(d.value.deals);
+      if (f.status === "fulfilled") setFilters(f.value);
     } finally {
       setLoading(false);
     }

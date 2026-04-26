@@ -115,6 +115,8 @@ def manual_refresh():
 @app.get("/filters")
 def get_filters():
     with Session(engine) as session:
-        sectors = [r[0] for r in session.exec(select(Deal.sector).distinct()) if r[0]]
-        rounds = [r[0] for r in session.exec(select(Deal.round_type).distinct()) if r[0]]
-    return {"sectors": sorted(sectors), "round_types": sorted(rounds)}
+        sector_rows = session.exec(select(Deal.sector).distinct()).all()
+        round_rows = session.exec(select(Deal.round_type).distinct()).all()
+    sectors = sorted([r for r in sector_rows if r])
+    rounds = sorted([r for r in round_rows if r])
+    return {"sectors": sectors, "round_types": rounds}
