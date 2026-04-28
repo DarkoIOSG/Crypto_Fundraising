@@ -30,6 +30,7 @@ export interface Stats {
   by_sector: { sector: string; count: number; total_usd_m: number }[];
   by_round: { round_type: string; count: number; total_usd_m: number }[];
   by_month: { month: string; count: number; total_usd_m: number }[];
+  top_investors: { fund: string; deals: number }[];
 }
 
 export interface Filters {

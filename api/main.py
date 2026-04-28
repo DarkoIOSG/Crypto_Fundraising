@@ -95,6 +95,21 @@ def get_stats():
             for r in month_rows
         ]
 
+        # top investors — parse comma-separated lead_investors field
+        investor_rows = session.exec(
+            select(Deal.lead_investors).where(Deal.lead_investors != None)
+        ).all()
+        investor_counts: dict[str, int] = {}
+        for raw in investor_rows:
+            for name in raw.split(","):
+                name = name.strip()
+                if name:
+                    investor_counts[name] = investor_counts.get(name, 0) + 1
+        top_investors = [
+            {"fund": k, "deals": v}
+            for k, v in sorted(investor_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+        ]
+
     avg_deal = round(total_raised / total_deals, 2) if total_deals else 0.0
     return {
         "total_deals": total_deals,
@@ -103,6 +118,7 @@ def get_stats():
         "by_sector": by_sector,
         "by_round": by_round,
         "by_month": by_month,
+        "top_investors": top_investors,
     }
 
 

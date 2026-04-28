@@ -168,6 +168,35 @@ export default function App() {
           </ResponsiveContainer>
         </div>
 
+        {/* Top Active Funds */}
+        <div style={card}>
+          <div style={{ fontSize: 13, color: "#cbd5e1", marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}>
+            <Zap size={14} color="#f59e0b" /> Top Active Funds
+          </div>
+          {(stats?.top_investors ?? []).length === 0 ? (
+            <div style={{ color: "#64748b", fontSize: 12 }}>Not enough data yet.</div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {(stats?.top_investors ?? []).map((inv, i) => {
+                const max = stats!.top_investors[0].deals;
+                const pct = Math.round((inv.deals / max) * 100);
+                return (
+                  <div key={inv.fund} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <span style={{ width: 18, fontSize: 11, color: "#64748b", textAlign: "right" }}>{i + 1}</span>
+                    <span style={{ width: 180, fontSize: 12, color: "#e2e8f0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{inv.fund}</span>
+                    <div style={{ flex: 1, background: "#0f1117", borderRadius: 4, height: 8, overflow: "hidden" }}>
+                      <div style={{ width: `${pct}%`, height: "100%", background: COLORS[i % COLORS.length], borderRadius: 4, transition: "width 0.4s" }} />
+                    </div>
+                    <span style={{ width: 60, fontSize: 12, color: "#94a3b8", textAlign: "right" }}>
+                      {inv.deals} deal{inv.deals !== 1 ? "s" : ""}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
         {/* Deals table */}
         <div style={{ ...card, padding: 0, overflow: "hidden" }}>
           <div style={{ padding: "16px 20px", borderBottom: "1px solid #2a2d3a", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
