@@ -41,7 +41,7 @@ export default function App() {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshMsg, setRefreshMsg] = useState("");
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (attempt = 1) => {
     setLoading(true);
     try {
       const [s, d, f] = await Promise.allSettled([
@@ -52,6 +52,12 @@ export default function App() {
       if (s.status === "fulfilled") setStats(s.value);
       if (d.status === "fulfilled") setDeals(d.value.deals);
       if (f.status === "fulfilled") setFilters(f.value);
+
+      // if stats failed (server cold-starting), retry up to 4 times
+      if (s.status === "rejected" && attempt < 4) {
+        setTimeout(() => load(attempt + 1), attempt * 5000);
+        return;
+      }
     } finally {
       setLoading(false);
     }
